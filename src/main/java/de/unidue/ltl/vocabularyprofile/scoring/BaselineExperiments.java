@@ -125,19 +125,21 @@ public class BaselineExperiments extends Experiments_ImplBase{
 	 */
 	 public static AnalysisEngineDescription getPreprocessing(String languageCode) throws ResourceInitializationException {
 		 	
-		 	AnalysisEngineDescription seg = createEngineDescription(CoreNlpSegmenter.class,CoreNlpSegmenter.PARAM_LANGUAGE, "en");
-	        AnalysisEngineDescription tagger       = createEngineDescription(CoreNlpPosTagger.class,CoreNlpPosTagger.PARAM_LANGUAGE, "en");
+		AnalysisEngineDescription tagger       = createEngineDescription(VocabAnnotator.class);
 
-	        AnalysisEngineDescription lemmatizer   = createEngineDescription(CoreNlpLemmatizer.class);
+	     AnalysisEngineDescription lemmatizer   = createEngineDescription(VocabAnnotator.class);
 
-	        AnalysisEngineDescription vocab = createEngineDescription(VocabAnnotator.class);
+	     AnalysisEngineDescription vocab = createEngineDescription(VocabAnnotator.class);
+	        
+	     tagger = createEngineDescription(OpenNlpPosTagger.class, OpenNlpPosTagger.PARAM_LANGUAGE, "en");
+	     lemmatizer = createEngineDescription(ClearNlpLemmatizer.class);
 
+	     return createEngineDescription(
+	    		 createEngineDescription(
 
-	        if (languageCode.equals("en")){
+	                    ClearNlpSegmenter.class
 
-	            return createEngineDescription(
-
-	                    seg,
+	                           ),
 
 	                    tagger,
 
@@ -147,39 +149,6 @@ public class BaselineExperiments extends Experiments_ImplBase{
 
 	                    );
 
-	        } else if (languageCode.equals("de")){
-
-	            return createEngineDescription(
-
-	                    createEngineDescription(
-
-	                            OpenNlpSegmenter.class
-
-	                            ),
-
-	                    tagger,
-
-	                    lemmatizer,
-
-	                    createEngineDescription(NoOpAnnotator.class)
-
-	                    );
-
-	        } else {
-
-	            System.err.println("Unknown language code "+languageCode+". We currently support: en, de");
-
-	            System.exit(-1);
-
-	        }
-
-	        return null;
-
 	    }
-
-
-
-
-
 
 }
